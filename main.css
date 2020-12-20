@@ -2,6 +2,15 @@ body {
     font-family: 'Montserrat';
 }
 
+#modal {
+  display: none;
+  position: absolute;
+  float: left;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .fen,
 .pgn {
     display: none;

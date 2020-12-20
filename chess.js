@@ -97,7 +97,8 @@ function updateStatus(moveString, wasComputer = false) {
     }
 
     if (game.in_checkmate() || game.in_draw()) {
-        window.alert(status);
+       $('#message').html(status);
+       $('#modal').modal();
     }
 }
 
