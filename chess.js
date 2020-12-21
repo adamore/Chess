@@ -9,12 +9,6 @@ var $fen = $('#fen');
 var $pgn = $('#pgn');
 var gameId;
 
-$.getJSON('https://chess-engine-api.herokuapp.com/create-game', function (data) {
-    gameId = data.game_id;
-}).fail(function (error) {
-    window.alert('Apologies, there was an error on the server.');
-});
-
 function onDragStart(source, piece, position, orientation) {
     if (game.game_over()) return false
 
@@ -49,7 +43,7 @@ function getComputerMove(moveString) {
     $('#computerloading').css('visibility', 'visible');
     $('#board').css('cursor', 'not-allowed');
 
-    $.getJSON(`https://chess-engine-api.herokuapp.com/make-white-move?game_id=${gameId}&move=${moveString}`, function (data) {
+    $.getJSON(`https://chess-engine-api.herokuapp.com/make-white-move?game_id=${gameId}&move=${moveString}`, function(data) {
         var fromString = data.move.substring(0, 2);
         var toString = data.move.substring(2, 4);
 
@@ -65,8 +59,8 @@ function getComputerMove(moveString) {
 
         $('#computerloading').css('visibility', 'hidden');
         $('#board').css('cursor', 'default');
-    }).fail(function () {
-        window.alert("Apologies, there was an error on the server.");
+    }).fail(function() {
+        window.alert("Apologies, there was an error making your move on the server.");
         location.reload();
     });
 }
@@ -97,8 +91,8 @@ function updateStatus(moveString, wasComputer = false) {
     }
 
     if (game.in_checkmate() || game.in_draw()) {
-       $('#message').html(status);
-       $('#modal').modal();
+        $('#message').html(status);
+        $('#modal').modal();
     }
 }
 
@@ -110,4 +104,12 @@ var config = {
     onSnapEnd: onSnapEnd
 };
 
-var board = Chessboard('board', config);
+$.getJSON('https://chess-engine-api.herokuapp.com/create-game', function(data) {
+    gameId = data.game_id;
+    board = Chessboard('board', config);
+    $('#loading').hide();
+    $('#game').show();
+}).fail(function(error) {
+    window.alert('Apologies, there was an error starting the game on the server.');
+    location.reload();
+});
